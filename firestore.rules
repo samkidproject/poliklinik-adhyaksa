@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isValidPatient(data) {
+      return data.keys().hasAll(['nik', 'nama', 'gender', 'whatsapp']) &&
+             data.nik is string &&
+             data.nama is string &&
+             data.gender in ['Laki-laki', 'Perempuan'] &&
+             data.whatsapp is string;
+    }
+
+    function isValidStaff(data) {
+      return data.keys().hasAll(['nama', 'profesi', 'status']) &&
+             data.nama is string &&
+             data.profesi in ['Dokter', 'Perawat', 'Apoteker', 'Admin'] &&
+             data.status in ['Aktif', 'Cuti'];
+    }
+
+    function isValidQueue(data) {
+      return data.keys().hasAll(['patientId', 'namaPasien', 'poli', 'status']) &&
+             data.poli in ['Umum', 'Gigi', 'KIA'] &&
+             data.status in ['Menunggu', 'Selesai'];
+    }
+
+    function isValidMedicine(data) {
+      return data.keys().hasAll(['nama', 'kategori', 'stok']) &&
+             data.kategori in ['Tablet', 'Sirup', 'Kapsul', 'Salep', 'Injeksi'] &&
+             data.stok is number;
+    }
+
+    function isValidPrescription(data) {
+      return data.keys().hasAll(['patientId', 'nama', 'diagnosis', 'status']) &&
+             data.status in ['Diproses Farmasi', 'Selesai'];
+    }
+
+    match /artifacts/{appId}/public/data/patients/{nik} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidPatient(request.resource.data);
+    }
+
+    match /artifacts/{appId}/public/data/staffs/{staffId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidStaff(request.resource.data);
+    }
+
+    match /artifacts/{appId}/public/data/queues/{queueId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidQueue(request.resource.data);
+    }
+
+    match /artifacts/{appId}/public/data/medicines/{medicineId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidMedicine(request.resource.data);
+    }
+
+    match /artifacts/{appId}/public/data/prescriptions/{prescriptionId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidPrescription(request.resource.data);
+    }
+
+    match /test/connection {
+      allow read: if isAuthenticated();
+    }
+  }
+}

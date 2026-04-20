@@ -1,0 +1,6 @@
+{
+  "name": "Poliklinik Adhyaksa",
+  "description": "Sistem Informasi Manajemen Poliklinik Adhyaksa Kejaksaan Tinggi Lampung. Mendukung pendaftaran pasien, antrean poli, rekam medis dokter, dan manajemen farmasi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

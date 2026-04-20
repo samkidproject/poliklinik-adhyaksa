@@ -1,0 +1,100 @@
+{
+  "entities": {
+    "Patient": {
+      "title": "Patient",
+      "description": "Patient personal and registration data.",
+      "type": "object",
+      "properties": {
+        "nik": { "type": "string", "description": "National Identification Number (Unique ID)" },
+        "nama": { "type": "string", "description": "Full name of the patient" },
+        "alamat": { "type": "string", "description": "Home address" },
+        "gender": { "type": "string", "enum": ["Laki-laki", "Perempuan"] },
+        "whatsapp": { "type": "string", "description": "WhatsApp contact number" },
+        "registeredAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["nik", "nama", "gender", "whatsapp"]
+    },
+    "Staff": {
+      "title": "Staff",
+      "description": "Healthcare professionals and administrative staff.",
+      "type": "object",
+      "properties": {
+        "nama": { "type": "string", "description": "Staff name" },
+        "profesi": { "type": "string", "enum": ["Dokter", "Perawat", "Apoteker", "Admin"] },
+        "spesialisasi": { "type": "string", "description": "Medical specialization or department" },
+        "status": { "type": "string", "enum": ["Aktif", "Cuti"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["nama", "profesi", "status"]
+    },
+    "Queue": {
+      "title": "Queue",
+      "description": "Patient visit queue entry.",
+      "type": "object",
+      "properties": {
+        "patientId": { "type": "string", "description": "Reference to Patient NIK" },
+        "namaPasien": { "type": "string", "description": "Patient name for display" },
+        "poli": { "type": "string", "enum": ["Umum", "Gigi", "KIA"] },
+        "keluhan": { "type": "string", "description": "Patient's primary complaint" },
+        "tensi": { "type": "string", "description": "Blood pressure reading" },
+        "tinggi": { "type": "string", "description": "Height in cm" },
+        "berat": { "type": "string", "description": "Weight in kg" },
+        "status": { "type": "string", "enum": ["Menunggu", "Selesai"] },
+        "dokterId": { "type": "string", "description": "Staff ID of the doctor" },
+        "namaDokter": { "type": "string", "description": "Doctor name for display" },
+        "perawatId": { "type": "string", "description": "Staff ID of the nurse" },
+        "namaPerawat": { "type": "string", "description": "Nurse name for display" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["patientId", "namaPasien", "poli", "status"]
+    },
+    "Medicine": {
+      "title": "Medicine",
+      "description": "Pharmacy stock reference.",
+      "type": "object",
+      "properties": {
+        "nama": { "type": "string", "description": "Medicine name" },
+        "kategori": { "type": "string", "enum": ["Tablet", "Sirup", "Kapsul", "Salep", "Injeksi"] },
+        "stok": { "type": "number", "description": "Current inventory count" },
+        "stok_min": { "type": "number", "description": "Minimum stock threshold" }
+      },
+      "required": ["nama", "kategori", "stok"]
+    },
+    "Prescription": {
+      "title": "Prescription",
+      "description": "Medical prescription from doctor to pharmacy.",
+      "type": "object",
+      "properties": {
+        "patientId": { "type": "string", "description": "Reference to Patient NIK" },
+        "nama": { "type": "string", "description": "Patient name" },
+        "diagnosis": { "type": "string", "description": "Medical diagnosis and prescription details" },
+        "status": { "type": "string", "enum": ["Diproses Farmasi", "Selesai"] },
+        "dokterNama": { "type": "string", "description": "Name of prescribing doctor" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["patientId", "nama", "diagnosis", "status"]
+    }
+  },
+  "firestore": {
+    "/artifacts/{appId}/public/data/patients/{nik}": {
+      "schema": "Patient",
+      "description": "Stores patient registration documents."
+    },
+    "/artifacts/{appId}/public/data/staffs/{staffId}": {
+      "schema": "Staff",
+      "description": "Stores clinical staff information."
+    },
+    "/artifacts/{appId}/public/data/queues/{queueId}": {
+      "schema": "Queue",
+      "description": "Stores patient visit queues."
+    },
+    "/artifacts/{appId}/public/data/medicines/{medicineId}": {
+      "schema": "Medicine",
+      "description": "Stores pharmacy inventory information."
+    },
+    "/artifacts/{appId}/public/data/prescriptions/{prescriptionId}": {
+      "schema": "Prescription",
+      "description": "Stores medical prescriptions."
+    }
+  }
+}
