@@ -162,7 +162,7 @@ export default function App() {
               <button className="w-full py-6 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-widest hover:bg-black transition-all shadow-xl shadow-slate-200">Masuk Sistem</button>
             </form>
           </div>
-          <p className="mt-8 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Aplikasi Internal © 2024</p>
+          <p className="mt-8 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Samkid Project © 2026</p>
         </div>
       </div>
     );
