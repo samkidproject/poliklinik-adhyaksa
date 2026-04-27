@@ -30,7 +30,8 @@ service cloud.firestore {
     function isValidMedicine(data) {
       return data.keys().hasAll(['nama', 'kategori', 'stok']) &&
              data.kategori in ['Tablet', 'Sirup', 'Kapsul', 'Salep', 'Injeksi'] &&
-             data.stok is number;
+             data.stok is number &&
+             (!data.keys().contains('stok_min') || data.stok_min is number);
     }
 
     function isValidPrescription(data) {
@@ -40,12 +41,12 @@ service cloud.firestore {
 
     match /artifacts/{appId}/public/data/patients/{nik} {
       allow read: if isAuthenticated();
-      allow create, update: if isAuthenticated() && isValidPatient(request.resource.data);
+      allow create, update, delete: if isAuthenticated() && (request.method == 'delete' || isValidPatient(request.resource.data));
     }
 
     match /artifacts/{appId}/public/data/staffs/{staffId} {
       allow read: if isAuthenticated();
-      allow create, update: if isAuthenticated() && isValidStaff(request.resource.data);
+      allow create, update, delete: if isAuthenticated() && (request.method == 'delete' || isValidStaff(request.resource.data));
     }
 
     match /artifacts/{appId}/public/data/queues/{queueId} {
